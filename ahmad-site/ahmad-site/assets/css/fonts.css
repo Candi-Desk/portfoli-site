@@ -1,7 +1,0 @@
-/* Self-hosted fonts: nothing is requested from Google.
-   Archivo: put Archivo-Variable.woff2 in assets/fonts/ (see README-DEPLOY.txt).
-   Until then the page falls back to Helvetica Neue / Arial, which is legible but not identical. */
-@font-face{font-family:"Archivo";font-style:normal;font-weight:100 900;font-display:swap;
-  src:url("../fonts/Archivo-Variable.woff2") format("woff2")}
-@font-face{font-family:"IBM Plex Mono";font-style:normal;font-weight:400 500;font-display:swap;
-  src:url("../fonts/IBMPlexMono-Regular.woff") format("woff")}
