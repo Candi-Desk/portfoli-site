@@ -1,0 +1,769 @@
+/* ==========================================================================
+   AAJ DESIGN SYSTEM v1.1 — Ahmad Al Jabri portfolio
+   --------------------------------------------------------------------------
+   Layers, in order. Never hard-code a value that a token already holds.
+
+     1. PRIMITIVES   raw ramps — colour, type scale, space scale, motion
+     2. SEMANTIC     role-based aliases — surface, text, border, action
+     3. BASE          element defaults
+     4. COMPONENTS   built only from layer 2
+     5. ICONOGRAPHY  one stroke grid, one sizing rule, currentColor
+     6. MOTION       layered onto a page that is already complete
+
+   Foundations follow the course material: an 8-point spacing grid and
+   component states after Material Design [M04.2, Design Standards &
+   Libraries]; grouping by proximity and similarity after the Gestalt audit;
+   visible system status and user control after Nielsen's heuristics.
+   Contrast ratios are measured against #FFFFFF and noted beside each token.
+   ========================================================================== */
+
+/* ==========================================================================
+   1. PRIMITIVES
+   ========================================================================== */
+:root{
+  /* --- colour ramp -------------------------------------------------------
+     Neutrals carry a slight blue bias toward the accent so the page reads
+     as one system rather than as grey plus a colour.                      */
+  --c-white:#FFFFFF;
+  --c-ink-900:#111216;   /* 18.9:1 — body and headings            */
+  --c-ink-700:#3C434F;   /* 10.1:1 — strong secondary text        */
+  --c-ink-500:#5F6775;   /*  5.7:1 — small labels, captions (AA)  */
+  --c-ink-300:#9AA2B1;   /*  2.9:1 — decorative only, never text  */
+  --c-ink-200:#D5D9E0;   /* borders                               */
+  --c-ink-100:#E9ECF1;   /* rules, inactive tracks                */
+  --c-ink-050:#F6F7FA;   /* raised surface                        */
+
+  --c-accent-700:#0E2E80; /* hover state                          */
+  --c-accent-500:#13399E; /* 10.0:1 — links, actions, data marks  */
+  --c-accent-300:#6E84D6; /*  3.4:1 — the "before" mark; graphic  */
+  --c-accent-100:#E8ECF9; /* tint surface                         */
+
+  /* --- type scale — modular, ratio 1.25, 17px base ---------------------- */
+  --font-display:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --font-body:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --font-mono:"IBM Plex Mono","SFMono-Regular",Consolas,monospace;
+
+  --text-2xs:0.72rem;   /* 12px — mono labels, eyebrows      */
+  --text-xs:0.8rem;     /* 14px — captions, footnotes        */
+  --text-sm:0.9rem;     /* 15px — secondary body             */
+  --text-base:1rem;     /* 17px — body                       */
+  --text-lg:1.18rem;    /* 20px — lede                       */
+  --text-xl:1.45rem;    /* 25px — h3                         */
+  --text-2xl:1.9rem;    /* 32px — h2 min                     */
+  --text-3xl:2.9rem;    /* 49px — h2 max                     */
+  --text-4xl:5rem;      /* 85px — h1 max                     */
+
+  --weight-regular:400;
+  --weight-medium:500;
+  --weight-semibold:600;
+  --weight-bold:700;
+  --weight-black:800;
+
+  --leading-tight:1.02;
+  --leading-snug:1.25;
+  --leading-normal:1.6;
+
+  --tracking-tight:-.03em;
+  --tracking-normal:-.02em;
+  --tracking-wide:.14em;   /* uppercase mono only */
+
+  /* --- space scale — 8pt grid with half steps --------------------------- */
+  --space-1:4px;
+  --space-2:8px;
+  --space-3:12px;
+  --space-4:16px;
+  --space-5:24px;
+  --space-6:32px;
+  --space-7:48px;
+  --space-8:64px;
+  --space-9:96px;
+  --space-10:128px;
+
+  /* --- geometry --------------------------------------------------------- */
+  --radius-sharp:2px;     /* the only radius in the system */
+  --border-hair:1px;
+  --max-measure:66ch;     /* reading width  */
+  --max-width:1240px;     /* page container */
+  --gutter:clamp(20px,5vw,64px);
+  --tap-min:44px;         /* minimum interactive target */
+
+  /* --- icon grid -------------------------------------------------------- */
+  --icon-stroke:1.6;      /* one stroke weight across the set */
+  --icon-sm:14px;
+  --icon-md:18px;
+  --icon-lg:26px;
+
+  /* --- motion ----------------------------------------------------------- */
+  --dur-fast:160ms;
+  --dur-base:240ms;
+  --dur-slow:450ms;
+  --dur-chart:800ms;
+  --dur-rail:1100ms;
+  --stagger:80ms;
+  --ease-standard:cubic-bezier(.2,.7,.3,1);
+  --ease-out:ease-out;
+}
+
+/* ==========================================================================
+   2. SEMANTIC TOKENS — components reference only these
+   ========================================================================== */
+:root{
+  --surface:var(--c-white);
+  --surface-raised:var(--c-ink-050);
+  --surface-tint:var(--c-accent-100);
+
+  --text-primary:var(--c-ink-900);
+  --text-secondary:var(--c-ink-700);
+  --text-muted:var(--c-ink-500);
+  --text-ondark:var(--c-white);
+
+  --border-default:var(--c-ink-200);
+  --border-subtle:var(--c-ink-100);
+  --border-strong:var(--c-ink-900);
+  --border-accent:var(--c-accent-500);
+
+  --action:var(--c-accent-500);
+  --action-hover:var(--c-accent-700);
+  --action-tint:var(--c-accent-100);
+
+  --data-primary:var(--c-accent-500);
+  --data-before:var(--c-accent-300);
+  --data-deemph:var(--c-ink-500);
+  --data-track:var(--c-accent-100);
+  --data-muted:var(--c-ink-200);
+
+  --icon-default:var(--c-ink-500);
+  --icon-accent:var(--c-accent-500);
+
+  --focus-ring:var(--c-accent-500);
+
+  --rule:var(--border-hair) solid var(--border-subtle);
+  color-scheme:light;
+}
+
+/* ==========================================================================
+   3. BASE
+   ========================================================================== */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+
+body{
+  margin:0;
+  background:var(--surface);
+  color:var(--text-primary);
+  font-family:var(--font-body);
+  font-size:17px;
+  line-height:var(--leading-normal);
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+
+img{max-width:100%;height:auto;display:block}
+
+a{color:var(--action);text-decoration:none}
+a:hover{text-decoration:underline;text-underline-offset:3px}
+
+/* Focus: one visible treatment everywhere [Nielsen #1, visibility of status] */
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
+  outline:2px solid var(--focus-ring);
+  outline-offset:3px;
+  border-radius:var(--radius-sharp);
+}
+
+h1,h2,h3,h4{
+  font-family:var(--font-display);margin:0;text-wrap:balance;
+  letter-spacing:var(--tracking-normal);font-weight:var(--weight-bold);
+}
+h1{font-size:clamp(2.6rem,6.4vw,var(--text-4xl));line-height:var(--leading-tight);font-weight:var(--weight-black);letter-spacing:var(--tracking-tight)}
+h2{font-size:clamp(var(--text-2xl),3.8vw,var(--text-3xl));line-height:1.1}
+h3{font-size:clamp(1.15rem,2vw,var(--text-xl));line-height:var(--leading-snug)}
+h4{font-size:1.02rem;line-height:1.3}
+p{margin:0}
+
+.wrap{max-width:var(--max-width);margin-inline:auto;padding-inline:var(--gutter)}
+.num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+
+/* ==========================================================================
+   4. COMPONENTS
+   ========================================================================== */
+
+/* --- label / eyebrow ------------------------------------------------------ */
+.eyebrow{
+  font-family:var(--font-mono);font-size:var(--text-2xs);font-weight:var(--weight-medium);
+  letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-muted);margin:0;
+  display:inline-flex;align-items:center;gap:var(--space-2);
+}
+.eyebrow .icon{color:var(--icon-accent)}
+
+/* --- section frame -------------------------------------------------------- */
+.section{padding-block:clamp(var(--space-8),8vw,112px);border-top:var(--rule)}
+.section--flush{border-top:0}
+.section-head{display:flex;align-items:center;gap:var(--space-5);margin-bottom:var(--space-5)}
+.section-head .line{flex:1;height:1px;background:var(--border-subtle);min-width:var(--space-5);transform:scaleX(0);transform-origin:left}
+.section-head.is-in .line{transform:scaleX(1);transition:transform var(--dur-rail) var(--ease-standard)}
+.lede{font-size:clamp(1.02rem,1.5vw,var(--text-lg));color:var(--text-secondary);max-width:60ch}
+
+/* --- scroll progress [Nielsen #1 — visibility of system status] ----------- */
+.progress{
+  position:fixed;top:0;left:0;z-index:60;height:2px;width:100%;
+  background:var(--action);transform:scaleX(0);transform-origin:0 50%;
+  transition:transform 90ms linear;pointer-events:none;
+}
+
+/* --- navigation ----------------------------------------------------------- */
+.nav{
+  position:fixed;inset-inline:0;top:0;z-index:50;
+  background:rgba(255,255,255,.9);
+  backdrop-filter:saturate(180%) blur(10px);
+  -webkit-backdrop-filter:saturate(180%) blur(10px);
+  border-bottom:var(--border-hair) solid transparent;
+  transform:translateY(-100%);
+  transition:transform var(--dur-base) var(--ease-standard),border-color var(--dur-base) var(--ease-standard);
+}
+.nav.is-visible{transform:translateY(0);border-bottom-color:var(--border-subtle)}
+.nav--static{position:sticky;transform:none;border-bottom-color:var(--border-subtle)}
+.nav-in{display:flex;align-items:center;gap:var(--space-5);min-height:62px}
+.nav-name{font-family:var(--font-display);font-weight:var(--weight-bold);letter-spacing:var(--tracking-normal);color:var(--text-primary);font-size:var(--text-base)}
+.nav-name:hover{text-decoration:none;color:var(--action)}
+.nav-links{display:none;gap:var(--space-5);margin-left:auto;font-size:var(--text-sm)}
+.nav-links a{color:var(--text-secondary);position:relative;padding-block:var(--space-1)}
+.nav-links a::after{
+  content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--action);
+  transform:scaleX(0);transform-origin:left;transition:transform var(--dur-fast) var(--ease-standard);
+}
+.nav-links a:hover,.nav-links a.is-active{color:var(--text-primary);text-decoration:none}
+.nav-links a:hover::after,.nav-links a.is-active::after{transform:scaleX(1)}
+.nav .btn{margin-left:auto}
+@media(min-width:860px){
+  .nav-links{display:flex}
+  .nav .btn{margin-left:0}
+}
+
+/* --- button --------------------------------------------------------------
+   States: default · hover · focus-visible · active. Minimum target 44px. */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:var(--space-2);
+  min-height:var(--tap-min);
+  font-family:var(--font-mono);font-size:var(--text-2xs);letter-spacing:.06em;text-transform:uppercase;
+  padding:var(--space-3) var(--space-4);border-radius:var(--radius-sharp);
+  border:var(--border-hair) solid var(--action);
+  background:var(--action);color:var(--text-ondark);cursor:pointer;white-space:nowrap;
+  transition:background var(--dur-fast) var(--ease-standard),border-color var(--dur-fast) var(--ease-standard),color var(--dur-fast) var(--ease-standard);
+}
+.btn:hover{background:var(--action-hover);border-color:var(--action-hover);color:var(--text-ondark);text-decoration:none}
+.btn:active{transform:translateY(1px)}
+.btn--ghost{background:transparent;color:var(--action)}
+.btn--ghost:hover{background:var(--action-tint);color:var(--action);border-color:var(--action)}
+.btn--sm{min-height:38px;padding:var(--space-2) var(--space-3)}
+.btn .icon{transition:transform var(--dur-fast) var(--ease-standard)}
+.btn:hover .icon{transform:translateX(3px)}
+
+/* --- tag ------------------------------------------------------------------ */
+.tag{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:var(--font-mono);font-size:.7rem;letter-spacing:.06em;color:var(--text-secondary);
+  border:var(--border-hair) solid var(--border-default);border-radius:var(--radius-sharp);
+  padding:var(--space-1) 9px;white-space:nowrap;
+}
+.tag .icon{color:var(--icon-default)}
+
+/* --- hero ----------------------------------------------------------------- */
+.hero{padding-block:clamp(68px,11vw,132px) clamp(var(--space-7),6vw,72px)}
+.hero-grid{display:grid;gap:clamp(var(--space-6),4vw,var(--space-7));align-items:end}
+@media(min-width:900px){.hero-grid{grid-template-columns:minmax(0,1fr) 300px}}
+.hero h1{margin-top:var(--space-4)}
+.hero h1 em{font-style:normal;color:var(--action)}
+.hero-sub{margin-top:var(--space-5);font-size:clamp(1.05rem,1.7vw,1.32rem);line-height:1.45;color:var(--text-secondary);max-width:40ch}
+.hero-actions{display:flex;flex-wrap:wrap;gap:var(--space-3);margin-top:var(--space-6)}
+.hero-note{display:flex;flex-wrap:wrap;gap:var(--space-2) var(--space-5);margin-top:var(--space-6)}
+.hero-note span{display:inline-flex;align-items:center;gap:var(--space-2);font-size:var(--text-xs);color:var(--text-muted)}
+.hero-note .icon{color:var(--icon-accent)}
+.portrait{margin:0;position:relative;max-width:220px}
+@media(min-width:900px){.portrait{max-width:none}}
+.portrait img{aspect-ratio:1;object-fit:cover;filter:grayscale(1) contrast(1.04)}
+.portrait figcaption{
+  display:inline-flex;align-items:center;gap:var(--space-2);
+  font-family:var(--font-mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--text-muted);margin-top:var(--space-3);
+}
+.portrait figcaption .icon{color:var(--icon-accent)}
+.portrait figcaption{white-space:nowrap}
+@media(max-width:480px){.portrait figcaption{font-size:.58rem;letter-spacing:.06em}}
+
+/* --- data strip (proof / stats / glance) ---------------------------------
+   One pattern, three uses. Grouping by proximity; hairlines, not boxes.   */
+.proof,.glance,.stats-row,.orgs,.method{display:grid;gap:0}
+.proof,.glance,.stats-row{border-top:var(--rule);border-bottom:var(--rule)}
+.proof > div,.glance > div,.stats-row > div,.orgs > div,.method > div{padding:var(--space-5) 0;border-top:var(--rule)}
+.proof > div:first-child,.glance > div:first-child,.stats-row > div:first-child,.orgs > div:first-child,.method > div:first-child{border-top:0}
+@media(min-width:620px){
+  .proof,.glance{grid-template-columns:repeat(2,1fr)}
+  .stats-row{grid-template-columns:repeat(3,1fr)}
+  .proof > div,.glance > div,.stats-row > div{padding:var(--space-5) var(--space-5);border-left:var(--rule);border-top:0}
+  .proof > div:nth-child(odd),.glance > div:nth-child(odd){padding-left:0;border-left:0}
+  .proof > div:nth-child(n+3),.glance > div:nth-child(n+3){border-top:var(--rule)}
+  .stats-row > div:first-child{padding-left:0;border-left:0}
+}
+@media(min-width:760px){
+  .method{grid-template-columns:repeat(2,1fr)}
+  .method > div{padding:var(--space-6) var(--space-5);border-left:var(--rule);border-top:0}
+  .method > div:nth-child(odd){padding-left:0;border-left:0}
+  .method > div:nth-child(n+3){border-top:var(--rule)}
+}
+@media(min-width:720px){
+  .orgs{grid-template-columns:repeat(2,1fr)}
+  .orgs > div{padding:var(--space-5) var(--space-5);border-left:var(--rule);border-top:0}
+  .orgs > div:nth-child(odd){padding-left:0;border-left:0}
+  .orgs > div:nth-child(n+3){border-top:var(--rule)}
+}
+@media(min-width:980px){
+  .proof{grid-template-columns:repeat(4,1fr)}
+  .proof > div{border-top:0;border-left:var(--rule);padding-left:var(--space-5)}
+  .proof > div:first-child{padding-left:0;border-left:0}
+}
+@media(min-width:960px){
+  .glance{grid-template-columns:repeat(4,1fr)}
+  .glance > div{border-top:0;border-left:var(--rule);padding-left:var(--space-5)}
+  .glance > div:first-child{padding-left:0;border-left:0}
+}
+@media(min-width:1040px){
+  .orgs{grid-template-columns:repeat(4,1fr)}
+  .orgs > div{border-top:0;border-left:var(--rule);padding-left:var(--space-5)}
+  .orgs > div:first-child{padding-left:0;border-left:0}
+}
+@media(min-width:1100px){
+  .method{grid-template-columns:repeat(4,1fr)}
+  .method > div{border-top:0;border-left:var(--rule);padding-left:var(--space-5)}
+  .method > div:first-child{padding-left:0;border-left:0}
+}
+
+.proof .figure,.stats-row .figure{
+  font-family:var(--font-display);font-weight:var(--weight-black);letter-spacing:-.035em;
+  line-height:1;color:var(--text-primary);
+}
+.proof .figure{font-size:clamp(2.1rem,4.4vw,3.1rem)}
+.stats-row .figure{font-size:clamp(1.7rem,3.4vw,2.4rem)}
+.proof .figure .unit{color:var(--action)}
+.proof .caption,.stats-row .caption{margin-top:var(--space-2);font-size:var(--text-sm);color:var(--text-secondary);max-width:28ch}
+/* figures wrap to different line counts, so the attribution is pushed to a
+   shared baseline: four tiles, one bottom edge. */
+.proof > div{display:flex;flex-direction:column}
+.proof .src{margin-top:auto;padding-top:var(--space-3);display:inline-flex;align-items:flex-start;gap:6px;font-family:var(--font-mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted)}
+.proof .src .icon{margin-top:1px}
+.proof .src .icon{color:var(--icon-accent)}
+.glance .k{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted)}
+.glance .k .icon{color:var(--icon-accent)}
+.glance .v{margin-top:var(--space-2);font-size:var(--text-sm);font-weight:var(--weight-medium)}
+
+/* --- tier banner ---------------------------------------------------------
+   Names what a block of work IS, so a commercial result and a training
+   project are never read at the same weight.                             */
+.tier{
+  display:flex;flex-wrap:nowrap;align-items:flex-start;gap:var(--space-4);
+  margin-top:var(--space-5);padding:var(--space-4);
+  border-left:2px solid var(--border-accent);background:var(--surface-raised);
+  border-radius:var(--radius-sharp);max-width:74ch;
+}
+.tier .icon{color:var(--icon-accent);flex:none;margin-top:2px}
+.tier > p{flex:1 1 auto;min-width:0}
+.tier p{font-size:var(--text-sm);color:var(--text-secondary)}
+.tier p b{color:var(--text-primary);font-weight:var(--weight-semibold)}
+.tier--quiet{border-left-color:var(--border-default)}
+.tier--quiet .icon{color:var(--icon-default)}
+
+/* --- work index (tier one — commercial) ----------------------------------- */
+.work-list{display:grid;gap:clamp(var(--space-6),5vw,var(--space-8));margin-top:var(--space-6)}
+.work-item{display:grid;gap:var(--space-5);padding-top:var(--space-6);border-top:var(--border-hair) solid var(--border-subtle);transition:border-top-color var(--dur-base) var(--ease-standard)}
+.work-item:hover{border-top-color:var(--border-accent)}
+@media(min-width:860px){.work-item{grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:var(--space-7);align-items:start}}
+.work-item .index{display:inline-flex;align-items:center;gap:var(--space-2);font-family:var(--font-mono);font-size:var(--text-2xs);letter-spacing:var(--tracking-wide);color:var(--text-muted)}
+.work-item .index .icon{color:var(--icon-accent)}
+.work-item h3{margin-top:var(--space-3);font-size:clamp(1.5rem,2.8vw,2.1rem);letter-spacing:-.025em}
+.work-item h3 a{color:var(--text-primary)}
+.work-item h3 a:hover{color:var(--action);text-decoration:none}
+.work-item .outcome{margin-top:var(--space-3);color:var(--text-secondary);max-width:52ch}
+.work-item .outcome b{color:var(--text-primary);font-weight:var(--weight-semibold)}
+.work-meta{display:flex;flex-wrap:wrap;gap:var(--space-2);margin-top:var(--space-4)}
+/* 26px tall, clearing the 24px minimum for a target that is not inline
+   in a sentence [WCAG 2.5.8]. */
+.more{display:inline-flex;align-items:center;gap:var(--space-2);margin-top:var(--space-4);padding-block:var(--space-2);min-height:26px;font-family:var(--font-mono);font-size:var(--text-2xs);letter-spacing:.06em;text-transform:uppercase}
+.more .icon{transition:transform var(--dur-fast) var(--ease-standard)}
+.work-item:hover .more .icon,.more:hover .icon{transform:translateX(4px)}
+.work-side{display:grid;gap:var(--space-3)}
+
+/* --- commercial results grid ---------------------------------------------
+   Roles that carry a number but not a case study. Same tier as above.    */
+.results{display:grid;gap:0;margin-top:var(--space-7);border-top:var(--rule);border-bottom:var(--rule)}
+.results > div{padding:var(--space-5) 0;border-top:var(--rule)}
+.results > div:first-child{border-top:0}
+@media(min-width:680px){
+  .results{grid-template-columns:repeat(2,1fr)}
+  .results > div{padding:var(--space-5);border-left:var(--rule);border-top:0}
+  .results > div:nth-child(odd){padding-left:0;border-left:0}
+  .results > div:nth-child(n+3){border-top:var(--rule)}
+}
+@media(min-width:1040px){
+  .results{grid-template-columns:repeat(4,1fr)}
+  .results > div{border-top:0;border-left:var(--rule);padding-left:var(--space-5)}
+  .results > div:first-child{padding-left:0;border-left:0}
+}
+.results .r-top{display:flex;align-items:center;gap:var(--space-2);color:var(--icon-accent)}
+.results .r-top .org{font-family:var(--font-mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase}
+.results .r-fig{margin-top:var(--space-3);font-family:var(--font-display);font-weight:var(--weight-black);letter-spacing:-.03em;line-height:1;font-size:clamp(1.6rem,3vw,2.1rem);color:var(--text-primary)}
+.results .r-txt{margin-top:var(--space-2);font-size:var(--text-sm);color:var(--text-secondary);max-width:30ch}
+.results .r-role{margin-top:var(--space-3);font-size:var(--text-xs);color:var(--text-muted)}
+
+/* --- practice cards (tier two — programme projects) ----------------------
+   Deliberately a card, not an index entry: a different object, read at a
+   different weight, so training work cannot be mistaken for a mandate.   */
+.practice{display:grid;gap:var(--space-5);margin-top:var(--space-6)}
+@media(min-width:840px){.practice{grid-template-columns:repeat(2,1fr);gap:var(--space-6)}}
+.p-card{
+  display:flex;flex-direction:column;
+  border:var(--border-hair) solid var(--border-default);border-radius:var(--radius-sharp);
+  background:var(--surface-raised);padding:var(--space-5);
+  transition:border-color var(--dur-base) var(--ease-standard),transform var(--dur-base) var(--ease-standard);
+}
+.p-card:hover{border-color:var(--border-accent);transform:translateY(-2px)}
+.p-card .p-top{display:flex;align-items:center;justify-content:space-between;gap:var(--space-3)}
+.p-card .p-kind{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted)}
+.p-card .p-kind .icon{color:var(--icon-default)}
+.p-card .p-grade{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:.66rem;letter-spacing:.06em;color:var(--action);border:var(--border-hair) solid var(--border-accent);border-radius:var(--radius-sharp);padding:2px 7px;background:var(--surface)}
+.p-card h3{margin-top:var(--space-4);font-size:clamp(1.2rem,2vw,1.42rem)}
+.p-card h3 a{color:var(--text-primary)}
+.p-card h3 a:hover{color:var(--action);text-decoration:none}
+.p-card .p-txt{margin-top:var(--space-3);font-size:var(--text-sm);color:var(--text-secondary)}
+.p-card .p-txt b{color:var(--text-primary);font-weight:var(--weight-semibold)}
+.p-card .work-meta{margin-top:var(--space-4)}
+.p-card .more{margin-top:auto;padding-top:var(--space-5)}
+.p-card:hover .more .icon{transform:translateX(4px)}
+
+/* --- frame (chart container) ---------------------------------------------- */
+.frame{border:var(--rule);background:var(--surface-raised);padding:var(--space-5);border-radius:var(--radius-sharp)}
+.frame-label{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:var(--space-3)}
+.frame-label .icon{color:var(--icon-accent)}
+
+/* --- bar chart ------------------------------------------------------------ */
+.bars{display:grid;gap:var(--space-3)}
+.bar{display:grid;grid-template-columns:minmax(64px,auto) 1fr auto;gap:var(--space-3);align-items:center}
+.bar .k{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.06em;color:var(--text-secondary)}
+.bar .track{height:10px;background:var(--data-muted);border-radius:1px;overflow:hidden;min-width:0}
+.bar .fill{height:100%;width:0;background:var(--data-primary);transition:width var(--dur-chart) var(--ease-standard)}
+.bar .fill--muted{background:var(--c-ink-300)}
+.bar .v{font-family:var(--font-mono);font-size:var(--text-xs);color:var(--text-primary)}
+
+/* --- method card ---------------------------------------------------------- */
+.method .m-icon{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:44px;height:44px;margin-bottom:var(--space-4);
+  border:var(--border-hair) solid var(--border-accent);border-radius:var(--radius-sharp);
+  background:var(--surface-tint);color:var(--icon-accent);
+}
+.method h4{margin-top:var(--space-3)}
+.method .m-list{margin:var(--space-3) 0 0;padding:0;list-style:none;display:grid;gap:7px;font-size:var(--text-sm);color:var(--text-secondary)}
+.method .m-list li{display:grid;grid-template-columns:16px 1fr;gap:var(--space-2);align-items:start}
+.method .m-list .icon{color:var(--icon-accent);margin-top:5px}
+.method .m-out{margin-top:var(--space-4);padding-top:var(--space-3);border-top:1px dashed var(--border-default);font-size:var(--text-xs);color:var(--text-secondary)}
+.method .m-out b{color:var(--text-primary);font-weight:var(--weight-semibold)}
+
+/* --- capability columns -------------------------------------------------
+   Three columns, each split into what was applied under a commercial
+   mandate and what was practised in the programme. The split is the
+   point: it is what stops training work reading as professional work. */
+@media(min-width:1000px){
+  .method--three{grid-template-columns:repeat(3,1fr)}
+  .method--three > div:nth-child(n+3){border-top:0}
+  .method--three > div:nth-child(odd){padding-left:var(--space-5);border-left:var(--rule)}
+  .method--three > div:first-child{padding-left:0;border-left:0}
+}
+.cap-group{margin-top:var(--space-5)}
+.cap-group:first-of-type{margin-top:var(--space-4)}
+.cap-label{
+  display:inline-flex;align-items:center;gap:7px;
+  font-family:var(--font-mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--text-muted);
+}
+.cap-label .icon{color:var(--icon-default)}
+.cap-label--pro{color:var(--action)}
+.cap-label--pro .icon{color:var(--icon-accent)}
+.cap-list{margin:var(--space-3) 0 0;padding:0;list-style:none;display:grid;gap:6px;font-size:var(--text-sm);color:var(--text-secondary)}
+.cap-list li{display:grid;grid-template-columns:14px 1fr;gap:var(--space-2);align-items:start}
+.cap-list .dot{width:5px;height:5px;border-radius:50%;background:var(--border-default);margin-top:8px}
+.cap-list li.is-pro .dot{background:var(--action)}
+
+/* --- timeline ------------------------------------------------------------- */
+.timeline{list-style:none;margin:var(--space-6) 0 0;padding:0 0 0 var(--space-6);position:relative}
+.timeline::before{
+  content:"";position:absolute;left:4px;top:var(--space-5);bottom:var(--space-5);width:1px;
+  background:var(--border-default);transform:scaleY(0);transform-origin:top;
+  transition:transform var(--dur-rail) var(--ease-standard);
+}
+.timeline.is-in::before{transform:scaleY(1)}
+.timeline li{display:grid;gap:var(--space-1);padding:var(--space-5) 0;border-top:var(--rule);position:relative}
+.timeline li::before{
+  content:"";position:absolute;left:calc(-1 * var(--space-6));top:calc(var(--space-5) + 9px);
+  width:9px;height:9px;border-radius:50%;background:var(--surface);
+  border:2px solid var(--border-default);box-sizing:border-box;
+  transition:border-color var(--dur-base) var(--ease-standard),transform var(--dur-base) var(--ease-standard);
+}
+.timeline li.is-in::before{border-color:var(--action)}
+.timeline li.is-current::before{background:var(--action);border-color:var(--action)}
+@media(min-width:800px){.timeline li{grid-template-columns:150px minmax(0,1fr) minmax(0,1fr);gap:var(--space-6);align-items:baseline}}
+.timeline .years{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:var(--text-xs);letter-spacing:.04em;color:var(--text-muted)}
+.timeline .role{font-weight:var(--weight-semibold)}
+.timeline .org{color:var(--text-muted);font-size:var(--text-sm);margin-top:2px;display:block}
+.timeline .res{color:var(--text-secondary);font-size:var(--text-sm)}
+.timeline .res b{color:var(--text-primary);font-weight:var(--weight-semibold)}
+
+/* --- institution card ----------------------------------------------------- */
+.orgs{margin-top:var(--space-7);border-top:var(--rule)}
+.orgs .mark{display:inline-flex;align-items:center;gap:var(--space-2);font-family:var(--font-mono);font-size:.74rem;letter-spacing:.1em;color:var(--action)}
+.orgs h4{margin-top:var(--space-2);font-size:.98rem}
+.orgs p{margin-top:var(--space-2);font-size:var(--text-xs);color:var(--text-secondary)}
+.orgs .note{margin-top:var(--space-3);font-size:.78rem;color:var(--text-muted)}
+
+/* --- role panel: a dashboard of achieved numbers -------------------------
+   Every tile is label / value / caption. A plot appears ONLY where real
+   multi-point data exists — a before-and-after, a three-period trend, a
+   ratio. The rest are stat tiles, because a one-bar chart of a single
+   headline number invents precision the figure does not have.          */
+.roles{display:grid;grid-template-columns:minmax(0,1fr);gap:0;margin-top:var(--space-6)}
+.role{min-width:0;padding-block:clamp(var(--space-6),4vw,var(--space-8));border-top:var(--rule)}
+.role:first-child{border-top:var(--border-hair) solid var(--border-strong)}
+
+.role-grid{display:grid;gap:var(--space-5);min-width:0}
+@media(min-width:900px){
+  .role-grid{grid-template-columns:minmax(0,310px) minmax(0,1fr);gap:var(--space-7);align-items:start}
+}
+.role-id{min-width:0;display:grid;gap:var(--space-3);align-content:start}
+.role-id .years{display:inline-flex;align-items:center;gap:7px;white-space:nowrap;font-family:var(--font-mono);font-size:var(--text-xs);letter-spacing:.04em;color:var(--text-muted)}
+.role-id .years .icon{color:var(--icon-accent)}
+.role-id .role-title{font-family:var(--font-display);font-weight:var(--weight-bold);letter-spacing:var(--tracking-normal);font-size:clamp(1.15rem,2vw,1.4rem);line-height:1.2}
+.role-id .role-org{font-size:var(--text-sm);color:var(--text-secondary);line-height:1.5}
+.role-id .role-prior{display:inline-flex;align-items:flex-start;gap:7px;font-size:var(--text-xs);color:var(--text-muted);line-height:1.45}
+.role-id .role-prior .icon{color:var(--icon-default);margin-top:2px;flex:none}
+.role-id .scale{justify-self:start;display:inline-flex;align-items:center;gap:7px;border:var(--border-hair) solid var(--border-default);border-radius:var(--radius-sharp);padding:var(--space-2) 10px;background:var(--surface-raised);font-family:var(--font-mono);font-size:var(--text-2xs);letter-spacing:.04em;color:var(--text-secondary)}
+.role-id .scale .icon{color:var(--icon-accent)}
+
+/* --- tiles --- */
+/* Cell rules are drawn by the tiles themselves (top + left) and closed by
+   the container (right + bottom). A gap filled with border colour would
+   turn an incomplete last row into a grey block. */
+.tiles{
+  display:grid;gap:0;min-width:0;background:var(--surface);
+  border-right:var(--border-hair) solid var(--border-subtle);
+  border-bottom:var(--border-hair) solid var(--border-subtle);
+}
+@media(min-width:760px){.tiles{grid-template-columns:repeat(2,1fr)}}
+.tile{
+  padding:var(--space-5);min-width:0;display:grid;align-content:start;gap:var(--space-3);
+  border-top:var(--border-hair) solid var(--border-subtle);
+  border-left:var(--border-hair) solid var(--border-subtle);
+}
+.t-label{display:inline-flex;align-items:center;gap:7px;font-family:var(--font-mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted)}
+.t-label .icon{color:var(--icon-default)}
+/* proportional figures: tabular-nums makes a standalone number look loose */
+.t-value{
+  font-family:var(--font-display);font-weight:var(--weight-black);
+  font-size:clamp(1.5rem,2.4vw,1.92rem);line-height:1.04;letter-spacing:-.03em;
+  color:var(--text-primary);font-variant-numeric:proportional-nums;
+}
+.t-value .unit{color:var(--text-muted);font-weight:var(--weight-bold)}
+.t-caption{font-size:var(--text-sm);line-height:1.55;color:var(--text-secondary)}
+.t-plot{margin-block:var(--space-1) var(--space-1)}
+.t-plot svg{display:block;width:100%;height:auto;overflow:visible}
+
+/* dumbbell — before to after, one hue in two shades */
+.db-track{stroke:var(--border-default);stroke-width:1}
+.db-fill{stroke:var(--data-primary);stroke-width:2;stroke-linecap:round;
+  stroke-dasharray:var(--len,220);stroke-dashoffset:var(--len,220)}
+.js .is-in .db-fill{transition:stroke-dashoffset var(--dur-chart) var(--ease-standard);stroke-dashoffset:0}
+.db-a{fill:var(--data-before)}
+.db-b{fill:var(--data-primary)}
+.db-a,.db-b{stroke:var(--surface);stroke-width:2}            /* 2px surface ring */
+.js .db-b{transform:scale(.2);transform-origin:center;transform-box:fill-box;opacity:0}
+.js .is-in .db-b{transition:transform var(--dur-base) var(--ease-standard) var(--dur-chart),opacity var(--dur-base) linear var(--dur-chart);transform:scale(1);opacity:1}
+.db-lab{font-family:var(--font-body);font-size:11px;fill:var(--text-muted)}
+.db-lab--b{fill:var(--text-primary);font-weight:600}
+
+/* sparkline — three periods, current period in the accent */
+.sp-line{fill:none;stroke:var(--data-deemph);stroke-width:2;stroke-linejoin:round;stroke-linecap:round;
+  stroke-dasharray:var(--len,260);stroke-dashoffset:var(--len,260)}
+.js .is-in .sp-line{transition:stroke-dashoffset var(--dur-chart) var(--ease-standard);stroke-dashoffset:0}
+.sp-dot{fill:var(--data-primary);stroke:var(--surface);stroke-width:2}
+.js .sp-dot{opacity:0}
+.js .is-in .sp-dot{transition:opacity var(--dur-base) linear var(--dur-chart);opacity:1}
+.sp-base{stroke:var(--border-subtle);stroke-width:1}          /* solid hairline, never dashed */
+.sp-lab{font-family:var(--font-body);font-size:11px;fill:var(--text-muted)}
+
+/* meter — fill is the accent, track a lighter step of the same ramp */
+.meter{height:10px;background:var(--data-track);border-radius:1px;overflow:hidden}
+.meter i{display:block;height:100%;width:0;background:var(--data-primary);border-radius:0 1px 1px 0}
+.js .is-in .meter i{transition:width var(--dur-chart) var(--ease-standard)}
+.meter-scale{display:flex;justify-content:space-between;margin-top:6px;font-size:11px;color:var(--text-muted)}
+
+/* --- quote ---------------------------------------------------------------- */
+.quote{padding-block:clamp(52px,7vw,var(--space-9));border-top:var(--rule);background:var(--surface-raised)}
+.quote blockquote{margin:0;max-width:52ch}
+.quote q{quotes:none}
+.quote .mark-icon{color:var(--icon-accent);margin-bottom:var(--space-4);display:block}
+.quote .text{font-family:var(--font-display);font-weight:var(--weight-bold);letter-spacing:var(--tracking-normal);font-size:clamp(1.3rem,3vw,2rem);line-height:1.28}
+.quote cite{display:block;margin-top:var(--space-5);font-style:normal;font-family:var(--font-mono);font-size:var(--text-xs);color:var(--text-muted);letter-spacing:.04em;line-height:1.7}
+
+/* --- contact & form ------------------------------------------------------- */
+.contact-grid{display:grid;gap:var(--space-7);margin-top:var(--space-5)}
+@media(min-width:900px){.contact-grid{grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:var(--space-8)}}
+.avail{display:flex;gap:var(--space-3);font-size:clamp(1.1rem,2vw,1.4rem);line-height:1.4;max-width:32ch}
+.avail .icon{color:var(--icon-accent);flex:none;margin-top:7px}
+.direct{margin-top:var(--space-6);display:grid;gap:var(--space-3)}
+.direct .row{display:flex;flex-wrap:wrap;gap:var(--space-3);align-items:center}
+.direct .k{display:inline-flex;align-items:center;gap:7px;font-family:var(--font-mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);min-width:88px}
+.direct .k .icon{color:var(--icon-accent)}
+.direct .v{font-size:var(--text-sm);word-break:break-word}
+.direct .v a{display:inline-block;padding-block:var(--space-1);min-height:26px}
+.copy{
+  font-family:var(--font-mono);font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;
+  border:var(--border-hair) solid var(--border-default);background:var(--surface);color:var(--text-secondary);
+  border-radius:var(--radius-sharp);padding:var(--space-2) 10px;min-height:26px;cursor:pointer;
+  transition:border-color var(--dur-fast) var(--ease-standard),color var(--dur-fast) var(--ease-standard);
+}
+.copy:hover{border-color:var(--border-accent);color:var(--action)}
+
+form{display:grid;gap:var(--space-4)}
+.field{display:grid;gap:7px}
+label{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted)}
+input,textarea{
+  font-family:var(--font-body);font-size:var(--text-base);color:var(--text-primary);background:var(--surface);
+  border:var(--border-hair) solid var(--border-default);border-radius:var(--radius-sharp);
+  padding:var(--space-3) var(--space-3);width:100%;min-height:var(--tap-min);
+}
+input:focus,textarea:focus{outline:none;border-color:var(--border-accent);box-shadow:0 0 0 3px var(--action-tint)}
+textarea{min-height:132px;resize:vertical}
+.form-note{font-size:var(--text-xs);color:var(--text-muted)}
+.form-ok{
+  display:none;align-items:center;gap:var(--space-3);
+  border:var(--border-hair) solid var(--border-accent);background:var(--surface-tint);
+  padding:var(--space-3) var(--space-4);border-radius:var(--radius-sharp);font-size:var(--text-sm);color:var(--text-primary);
+}
+.form-ok .icon{color:var(--icon-accent);flex:none}
+.form-ok.is-shown{display:flex;animation:pop var(--dur-base) var(--ease-standard)}
+
+/* --- footer --------------------------------------------------------------- */
+.foot{border-top:var(--rule);padding-block:var(--space-6);font-size:var(--text-xs);color:var(--text-muted)}
+.foot-in{display:flex;flex-wrap:wrap;gap:var(--space-3) var(--space-6);align-items:baseline;justify-content:space-between}
+.foot a{color:var(--text-secondary)}
+
+/* ==========================================================================
+   5. CASE STUDY PAGE
+   ========================================================================== */
+.case-hero{padding-block:clamp(var(--space-7),7vw,88px) clamp(var(--space-6),4vw,var(--space-7))}
+.case-hero h1{font-size:clamp(2.1rem,5vw,3.7rem);margin-top:var(--space-4)}
+.case-hero .one-line{margin-top:var(--space-5);font-size:clamp(1.05rem,1.8vw,1.3rem);color:var(--text-secondary);max-width:48ch}
+.case-hero .one-line b{color:var(--text-primary);font-weight:var(--weight-semibold)}
+
+.prose{max-width:var(--max-measure);display:grid;gap:var(--space-4)}
+.prose p{color:var(--text-secondary)}
+.prose p b,.prose p strong{color:var(--text-primary);font-weight:var(--weight-semibold)}
+.prose h3{margin-top:var(--space-3);color:var(--text-primary)}
+.prose ul{margin:0;padding-left:1.15em;color:var(--text-secondary);display:grid;gap:var(--space-2)}
+.prose blockquote{margin:var(--space-1) 0;padding-left:var(--space-5);border-left:2px solid var(--border-accent);font-size:1.05rem;color:var(--text-primary)}
+
+.beat{padding-block:clamp(var(--space-7),5vw,var(--space-8));border-top:var(--rule)}
+.beat-head{display:grid;gap:var(--space-2);margin-bottom:var(--space-5)}
+.beat-head .n{display:inline-flex;align-items:center;gap:var(--space-2);font-family:var(--font-mono);font-size:var(--text-2xs);letter-spacing:var(--tracking-wide);color:var(--action)}
+
+.pull{
+  margin-block:var(--space-2);padding:var(--space-5);
+  border:var(--border-hair) solid var(--border-accent);background:var(--surface-tint);
+  border-radius:var(--radius-sharp);max-width:var(--max-measure);
+}
+.pull .k{display:inline-flex;align-items:center;gap:7px;font-family:var(--font-mono);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--action);margin-bottom:var(--space-2)}
+.pull p{color:var(--text-primary)}
+
+.next{border-top:var(--rule);padding-block:clamp(var(--space-7),6vw,var(--space-8))}
+.next a{display:flex;flex-wrap:wrap;gap:var(--space-3);align-items:baseline;justify-content:space-between;color:var(--text-primary)}
+.next a:hover{text-decoration:none;color:var(--action)}
+.next .label{font-family:var(--font-mono);font-size:var(--text-2xs);letter-spacing:var(--tracking-wide);text-transform:uppercase;color:var(--text-muted)}
+.next .title{display:inline-flex;align-items:center;gap:var(--space-3);font-family:var(--font-display);font-weight:var(--weight-bold);font-size:clamp(1.3rem,3vw,2rem);letter-spacing:var(--tracking-normal)}
+.next .title .icon{transition:transform var(--dur-fast) var(--ease-standard)}
+.next a:hover .title .icon{transform:translateX(6px)}
+
+.stats-row{margin-block:var(--space-3)}
+
+/* ==========================================================================
+   6. ICONOGRAPHY
+   --------------------------------------------------------------------------
+   One sprite per page, referenced with <use>. Rules, so the set reads as
+   one family rather than as clip art:
+     · 24×24 viewBox, geometry on the same grid as the type
+     · stroke only, --icon-stroke weight, round caps and joins, never fill
+     · colour inherits from currentColor — icons never carry their own hue
+     · decorative by default (aria-hidden), because the label is the meaning
+     · sized in three steps only: sm 14 · md 18 · lg 26
+   ========================================================================== */
+.icon-sprite{position:absolute;width:0;height:0;overflow:hidden}
+.icon{
+  width:var(--icon-md);height:var(--icon-md);flex:none;
+  stroke:currentColor;fill:none;
+  stroke-width:var(--icon-stroke);stroke-linecap:round;stroke-linejoin:round;
+  vertical-align:-.16em;
+}
+.icon--sm{width:var(--icon-sm);height:var(--icon-sm);stroke-width:1.8}
+.icon--lg{width:var(--icon-lg);height:var(--icon-lg);stroke-width:1.4}
+
+/* ==========================================================================
+   7. STYLE GUIDE PAGE
+   ========================================================================== */
+.sg-grid{display:grid;gap:var(--space-4);grid-template-columns:repeat(auto-fit,minmax(190px,1fr));margin-top:var(--space-5)}
+.sg-swatch{border:var(--rule);border-radius:var(--radius-sharp);overflow:hidden}
+.sg-swatch .chip{height:76px}
+.sg-swatch .meta{padding:var(--space-3);display:grid;gap:3px}
+.sg-swatch .name{font-family:var(--font-mono);font-size:.74rem;color:var(--text-primary)}
+.sg-swatch .hex{font-family:var(--font-mono);font-size:.7rem;color:var(--text-muted)}
+.sg-swatch .ratio{font-size:.74rem;color:var(--text-secondary)}
+.sg-row{display:grid;gap:var(--space-3);padding:var(--space-4) 0;border-top:var(--rule);align-items:baseline}
+@media(min-width:720px){.sg-row{grid-template-columns:170px 1fr}}
+.sg-row .k{font-family:var(--font-mono);font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted)}
+.sg-space{display:flex;align-items:flex-end;gap:var(--space-2);flex-wrap:wrap;margin-top:var(--space-4)}
+.sg-space span{background:var(--action-tint);border:var(--border-hair) solid var(--border-accent);display:block}
+.sg-states{display:flex;flex-wrap:wrap;gap:var(--space-3);align-items:center;margin-top:var(--space-3)}
+.sg-note{font-size:var(--text-xs);color:var(--text-muted);margin-top:var(--space-2);max-width:60ch}
+.sg-icons{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:var(--space-3);margin-top:var(--space-5)}
+.sg-icons div{display:grid;gap:var(--space-2);justify-items:center;text-align:center;border:var(--rule);border-radius:var(--radius-sharp);padding:var(--space-4) var(--space-2)}
+.sg-icons .icon{color:var(--icon-accent)}
+.sg-icons code{font-family:var(--font-mono);font-size:.66rem;color:var(--text-muted)}
+
+/* ==========================================================================
+   8. MOTION — layered onto a page that is already complete
+   --------------------------------------------------------------------------
+   Four jobs only: orient on arrival (enter), confirm arrival in a new
+   section (reveal), make a number readable as a change (count, bars), and
+   confirm an action (pop). Nothing moves for decoration, nothing loops,
+   and every one of them is switched off by prefers-reduced-motion.
+   ========================================================================== */
+
+/* on-load entrance, staggered by --i */
+.js .enter{opacity:0;animation:enter var(--dur-slow) var(--ease-standard) forwards;animation-delay:calc(var(--i,0) * var(--stagger) + 60ms)}
+@keyframes enter{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* on-scroll reveal, staggered within a group by --i */
+.js .reveal{opacity:0;transform:translateY(12px)}
+.js .reveal.is-in{
+  opacity:1;transform:none;
+  transition:opacity var(--dur-slow) var(--ease-out) calc(var(--i,0) * var(--stagger)),
+             transform var(--dur-slow) var(--ease-out) calc(var(--i,0) * var(--stagger));
+}
+
+@keyframes pop{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+
+@media(prefers-reduced-motion:reduce){
+  .js .reveal,.js .enter{opacity:1!important;transform:none!important;transition:none!important;animation:none!important}
+  .section-head .line,.timeline::before{transform:none!important}
+  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .bar .fill{transition:none!important}
+  .progress{display:none}
+}
+
+/* --- skip link ------------------------------------------------------------ */
+.skip{position:absolute;left:-9999px;top:0}
+.skip:focus{left:12px;top:12px;z-index:100;background:var(--surface);padding:var(--space-3) var(--space-3);border:var(--border-hair) solid var(--border-accent)}
