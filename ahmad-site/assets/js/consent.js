@@ -6,6 +6,20 @@
   "use strict";
   var GA_ID = "G-EVMLX4ZCV5";           /* replace with your GA4 Measurement ID */
   var KEY = "analytics-consent";
+  /* Banner wording follows the page language; Accept and Decline stay equal in size and weight. */
+  var TXT = document.documentElement.lang === "de" ? {
+    title: "Analyse-Cookies",
+    body: "Ich möchte Besuche mit Google Analytics zählen, um zu sehen, welche Seiten nützlich sind. " +
+          "Es läuft nur, wenn Sie zustimmen. Sie können Ihre Auswahl jederzeit unter „Cookie-Einstellungen“ im Fußbereich ändern.",
+    privacy: "Datenschutzerklärung", decline: "Ablehnen", accept: "Akzeptieren",
+    inactive: "Analyse ist auf dieser Website nicht aktiv, daher gibt es nichts einzustellen."
+  } : {
+    title: "Analytics cookies",
+    body: "I would like to count visits with Google Analytics to see which pages are useful. " +
+          "It only runs if you accept. You can change your choice any time under “Cookie settings” in the footer.",
+    privacy: "Privacy notice", decline: "Decline", accept: "Accept",
+    inactive: "Analytics is not active on this site, so there is nothing to set."
+  };
   var configured = /^G-[A-Z0-9]{6,}$/.test(GA_ID) && GA_ID !== "G-XXXXXXXXXX";
 
   function read() { try { return localStorage.getItem(KEY); } catch (e) { return null; } }
@@ -44,12 +58,10 @@
     banner.setAttribute("aria-labelledby", "consent-title");
     banner.hidden = true;
     banner.innerHTML =
-      '<h2 id="consent-title">Analytics cookies</h2>' +
-      '<p>I would like to count visits with Google Analytics to see which pages are useful. ' +
-      'It only runs if you accept. You can change your choice any time under “Cookie settings” in the footer. ' +
-      '<a href="datenschutz.html">Privacy notice</a></p>' +
-      '<div class="row"><button type="button" data-choice="denied">Decline</button>' +
-      '<button type="button" data-choice="granted">Accept</button></div>';
+      '<h2 id="consent-title">' + TXT.title + '</h2>' +
+      '<p>' + TXT.body + ' <a href="datenschutz.html">' + TXT.privacy + '</a></p>' +
+      '<div class="row"><button type="button" data-choice="denied">' + TXT.decline + '</button>' +
+      '<button type="button" data-choice="granted">' + TXT.accept + '</button></div>';
     banner.addEventListener("click", function (e) {
       var c = e.target && e.target.getAttribute && e.target.getAttribute("data-choice");
       if (!c) return;
@@ -70,7 +82,7 @@
     var t = e.target && e.target.closest && e.target.closest("[data-cookie-settings]");
     if (!t) return;
     e.preventDefault();
-    if (!configured) { alert("Analytics is not active on this site, so there is nothing to set."); return; }
+    if (!configured) { alert(TXT.inactive); return; }
     show();
   });
 })();
