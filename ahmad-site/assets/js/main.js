@@ -132,11 +132,10 @@
      a different real figure, so the element owns its whole formatted value
      — separators included — rather than animating a digit group while a
      static ",000" sits beside it. */
-  var isDe = document.documentElement.lang === "de";
   var group = function (text) {
     var parts = text.split(".");
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, isDe ? "." : ",");
-    return parts.join(isDe ? "," : ".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parts.join(".");
   };
 
   var runCount = function (el) {
@@ -169,15 +168,12 @@
   }
 
   /* ---- copy buttons ------------------------------------------------------ */
-  var copyText = isDe
-    ? { idle: "Kopieren", done: "Kopiert", selected: "Markiert" }
-    : { idle: "Copy", done: "Copied", selected: "Selected" };
   each(document.querySelectorAll("[data-copy]"), function (btn) {
     btn.addEventListener("click", function () {
       var value = btn.getAttribute("data-copy");
       var done = function () {
-        btn.textContent = copyText.done;
-        setTimeout(function () { btn.textContent = copyText.idle; }, 1500);
+        btn.textContent = "Copied";
+        setTimeout(function () { btn.textContent = "Copy"; }, 1500);
       };
       var selectInstead = function () {
         var target = document.getElementById(btn.getAttribute("data-copy-target"));
@@ -187,8 +183,8 @@
         var sel = window.getSelection();
         sel.removeAllRanges();
         sel.addRange(range);
-        btn.textContent = copyText.selected;
-        setTimeout(function () { btn.textContent = copyText.idle; }, 1800);
+        btn.textContent = "Selected";
+        setTimeout(function () { btn.textContent = "Copy"; }, 1800);
       };
       if (navigator.clipboard && navigator.clipboard.writeText) {
         navigator.clipboard.writeText(value).then(done).catch(selectInstead);

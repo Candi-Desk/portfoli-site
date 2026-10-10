@@ -6,25 +6,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Ahmad Al Jabri — Senior Product Manager</title>
 <meta name="description" content="Senior product manager in Berlin. Eighteen years owning product, pricing and P&L in regulated banks and the UAE's national postal operator — and the measurement habit to prove when it is working.">
-<link rel="stylesheet" href="assets/css/fonts.css">
-<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-<link rel="canonical" href="https://ahmadaljabri.netlify.app/">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Ahmad Al Jabri — Senior Product Manager">
-<meta property="og:description" content="Senior product manager in Berlin. Eighteen years owning product, pricing and P&L in regulated banks and the UAE's national postal operator — and the measurement habit to prove when it is working.">
-<meta property="og:url" content="https://ahmadaljabri.netlify.app/">
-<meta property="og:image" content="https://ahmadaljabri.netlify.app/assets/img/ahmad.jpg">
-<meta name="twitter:card" content="summary">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="assets/css/styles.css">
-<link rel="alternate" hreflang="en" href="https://ahmadaljabri.netlify.app/">
-<link rel="alternate" hreflang="de" href="https://ahmadaljabri.netlify.app/index-de.html">
-<link rel="alternate" hreflang="x-default" href="https://ahmadaljabri.netlify.app/">
-<style>.lang{display:flex;align-items:center;gap:6px;margin-left:var(--space-3,12px);font-family:var(--font-mono);font-size:var(--text-2xs,.72rem);letter-spacing:.06em}.lang a,.lang span.cur{padding:6px 4px;min-width:28px;text-align:center;color:var(--text-secondary)}.lang a:hover{color:var(--text-primary);text-decoration:underline}.lang span.cur{color:var(--text-primary);font-weight:700;border-bottom:2px solid var(--action)}.lang .sep{color:var(--text-secondary)}@media(max-width:480px){.nav-in{gap:var(--space-3,12px)}.nav-name{white-space:nowrap}.lang{margin-left:0}.nav .btn--sm{padding:var(--space-2,8px) 8px;letter-spacing:.02em;font-size:.6rem;min-height:34px}.nav-name{font-size:.88rem}.lang a,.lang span.cur{min-width:24px;padding:6px 2px}.lang{gap:3px}.nav .btn--sm .icon{display:none}}</style>
-<link rel="stylesheet" href="assets/css/consent.css">
 </head>
 <body>
 
-<!-- icon set -->
+<!-- ICON SET — see assets/sprite.html and styleguide.html §Iconography -->
 <svg class="icon-sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg"><defs>
   <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h14M13 6l6 6-6 6"/></symbol>
   <symbol id="i-arrow-sm" viewBox="0 0 24 24"><path d="M6 12h11M12.5 7.5 17 12l-4.5 4.5"/></symbol>
@@ -70,7 +59,6 @@
       <a href="#about">About</a>
     </nav>
     <a class="btn btn--sm" href="#contact">Send a message<svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-sm"/></svg></a>
-    <div class="lang" role="group" aria-label="Language"><span class="cur" aria-current="true">EN</span><span class="sep" aria-hidden="true">/</span><a href="index-de.html" lang="de" hreflang="de" aria-label="Deutsche Version">DE</a></div>
   </div>
 </header>
 
@@ -146,6 +134,7 @@
             <h3 class="role-title">Director of Product Development &amp; Pricing</h3>
             <p class="role-org">Emirates Post Group · the UAE’s national postal operator</p>
             <p class="scale"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-layers"/></svg>Retail P&amp;L ≈ €240M</p>
+            <a class="more" href="case-emirates-post.html">Read the full case <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-sm"/></svg></a>
           </div>
           <div class="tiles" data-stagger>
           <div class="tile reveal">
@@ -528,12 +517,16 @@
         <p class="avail"><svg class="icon icon--lg" aria-hidden="true"><use href="#i-check"/></svg>Open to senior product roles in Berlin and remote. Available immediately.</p>
         <p style="margin-top:16px;color:var(--text-secondary);max-width:38ch">Send a line about the role and I will reply within a day.</p>
 
-        <p style="margin:16px 0 28px"><a class="btn" href="mailto:amjabri@gmail.com?subject=Product%20role%20enquiry">Email Ahmad<svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-sm"/></svg></a></p>
         <div class="direct">
           <div class="row">
             <span class="k"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-mail"/></svg>Email</span>
             <span class="v" id="email-value">amjabri@gmail.com</span>
             <button class="copy" type="button" data-copy="amjabri@gmail.com" data-copy-target="email-value">Copy</button>
+          </div>
+          <div class="row">
+            <span class="k"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-device"/></svg>Phone</span>
+            <span class="v" id="phone-value">+49 170 4324854</span>
+            <button class="copy" type="button" data-copy="+49 170 4324854" data-copy-target="phone-value">Copy</button>
           </div>
           <div class="row">
             <span class="k"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-link"/></svg>LinkedIn</span>
@@ -546,6 +539,25 @@
         </div>
       </div>
 
+      <div>
+        <form id="contact-form" novalidate>
+          <div class="field">
+            <label for="name">Name</label>
+            <input id="name" name="name" type="text" autocomplete="name" required>
+          </div>
+          <div class="field">
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" autocomplete="email" required>
+          </div>
+          <div class="field">
+            <label for="message">Message</label>
+            <textarea id="message" name="message" required></textarea>
+          </div>
+          <button class="btn" type="submit">Send a message<svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-sm"/></svg></button>
+          <p class="form-note">Three fields, because every extra one costs a reply.</p>
+          <p class="form-ok" id="form-ok"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Thank you — your message has been noted. In this presentation build the form is not connected to a mail service.</p>
+        </form>
+      </div>
     </div>
   </section>
 
@@ -554,13 +566,11 @@
 <footer class="foot">
   <div class="wrap foot-in">
     <span>Ahmad Al Jabri · Senior Product Manager · Berlin</span>
-    <span>Amounts converted from UAE dirham at EUR&nbsp;1 = AED&nbsp;4.11 (October 2026).</span>
-    <span><a href="impressum.html">Impressum</a> · <a href="datenschutz.html">Datenschutz</a> · <a href="#" data-cookie-settings>Cookie settings</a></span>
+    <span><a href="styleguide.html">Design system</a> · Amounts converted from UAE dirham at EUR&nbsp;1 = AED&nbsp;4.11 (October 2026).</span>
   </div>
 </footer>
 
 <script src="assets/js/main.js"></script>
-<script src="assets/js/consent.js"></script>
 </body>
 </html>
 

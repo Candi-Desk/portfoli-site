@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Design system — Ahmad Al Jabri</title>
+<meta name="description" content="The token system, components, states and accessibility rules behind this site, documented as a design system.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="assets/css/styles.css">
+</head>
+<body>
+
+<!-- ICON SET — see assets/sprite.html and styleguide.html §Iconography -->
+<svg class="icon-sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg"><defs>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-arrow-sm" viewBox="0 0 24 24"><path d="M6 12h11M12.5 7.5 17 12l-4.5 4.5"/></symbol>
+  <symbol id="i-rise" viewBox="0 0 24 24"><path d="M3 17.5l6-6 4 4 8-8M16.5 7.5H21v4.5"/></symbol>
+  <symbol id="i-fall" viewBox="0 0 24 24"><path d="M3 6.5l6 6 4-4 8 8M16.5 16.5H21V12"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M3 20.5h18M6.5 20.5V12M12 20.5V5.5M17.5 20.5V15"/></symbol>
+  <symbol id="i-layers" viewBox="0 0 24 24"><path d="M12 3 3 7.5 12 12l9-4.5L12 3ZM3 12.4 12 17l9-4.6M3 17.2 12 21.8l9-4.6"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.6"/><circle cx="12" cy="12" r="4"/><path d="M12 11.9v.2"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 2.9 4.6 6.1v6c0 4.2 3 7.5 7.4 9.1 4.4-1.6 7.4-4.9 7.4-9.1v-6L12 2.9Z"/><path d="M9.1 11.9l2.2 2.2 4-4"/></symbol>
+  <symbol id="i-zap" viewBox="0 0 24 24"><path d="M13.4 2.6 5.2 13.4h5.2L10 21.4l8.8-10.8h-5.3l-.1-8Z"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9.2" cy="8" r="3.5"/><path d="M2.8 19.6a6.5 6.5 0 0 1 12.8 0M16.6 5.1a3.5 3.5 0 0 1 0 6.8M17.6 19.6a6.6 6.6 0 0 0-1.5-4.2"/></symbol>
+  <symbol id="i-device" viewBox="0 0 24 24"><rect x="7" y="2.6" width="10" height="18.8" rx="2.2"/><path d="M11 18.6h2"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3.2" y="3.2" width="7.2" height="7.2" rx="1"/><rect x="13.6" y="3.2" width="7.2" height="7.2" rx="1"/><rect x="3.2" y="13.6" width="7.2" height="7.2" rx="1"/><rect x="13.6" y="13.6" width="7.2" height="7.2" rx="1"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.7" cy="10.7" r="6.7"/><path d="m15.5 15.5 5.3 5.3"/></symbol>
+  <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.8"/><path d="m15.4 8.6-2.1 5.4-5.4 2.1 2.1-5.4 5.4-2.1Z"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.8"/><path d="M3.2 12h17.6M12 3.2c2.3 2.4 3.6 5.5 3.6 8.8S14.3 18.4 12 20.8c-2.3-2.4-3.6-5.5-3.6-8.8S9.7 5.6 12 3.2Z"/></symbol>
+  <symbol id="i-bank" viewBox="0 0 24 24"><path d="M3 9.8 12 4.2l9 5.6M5.2 10.4v9h13.6v-9M3 19.4h18M9.2 19.4v-5.2M14.8 19.4v-5.2"/></symbol>
+  <symbol id="i-briefcase" viewBox="0 0 24 24"><rect x="2.8" y="7.2" width="18.4" height="12.8" rx="2"/><path d="M8.8 7.2V5.4a2 2 0 0 1 2-2h2.4a2 2 0 0 1 2 2v1.8M2.8 12.6h18.4"/></symbol>
+  <symbol id="i-cap" viewBox="0 0 24 24"><path d="M2.6 8.6 12 4.2l9.4 4.4L12 13 2.6 8.6Z"/><path d="M6.6 10.6v4.8c0 1.7 2.4 3 5.4 3s5.4-1.3 5.4-3v-4.8M20.4 9.6V15"/></symbol>
+  <symbol id="i-award" viewBox="0 0 24 24"><circle cx="12" cy="9" r="5.4"/><path d="M8.3 13.4 7.2 21 12 18.4 16.8 21l-1.1-7.6"/></symbol>
+  <symbol id="i-flask" viewBox="0 0 24 24"><path d="M9.2 3.2h5.6M10.2 3.2v5.2L5 18.2A2 2 0 0 0 6.8 21.2h10.4a2 2 0 0 0 1.8-3L13.8 8.4V3.2M7.6 14.6h8.8"/></symbol>
+  <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M3.5 7.5h9M18.5 7.5h2M3.5 16.5h3M12.5 16.5h8"/><circle cx="15" cy="7.5" r="2.4"/><circle cx="9.5" cy="16.5" r="2.4"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24"><path d="M14 3.2H7.4a2 2 0 0 0-2 2v13.6a2 2 0 0 0 2 2h9.2a2 2 0 0 0 2-2V8L14 3.2Z"/><path d="M13.8 3.4V8h4.6M9 13.4h6M9 17h4"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m4.8 12.4 4.9 4.9L19.4 7.6"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.8"/><path d="M12 7v5.2l3.4 2"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21.4s6.9-5.5 6.9-10.9a6.9 6.9 0 1 0-13.8 0C5.1 15.9 12 21.4 12 21.4Z"/><circle cx="12" cy="10.2" r="2.6"/></symbol>
+  <symbol id="i-mail" viewBox="0 0 24 24"><rect x="2.8" y="4.8" width="18.4" height="14.4" rx="2"/><path d="m3.6 6.6 8.4 6.1 8.4-6.1"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M10.6 13.4 20.8 3.2M15 3.2h5.8V9M20 14.2V19a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h4.8"/></symbol>
+  <symbol id="i-quote" viewBox="0 0 24 24"><path d="M9 7.4c-2.7 1.1-4.4 3.4-4.4 6.1 0 1.9 1.2 3.2 2.9 3.2 1.5 0 2.6-1.1 2.6-2.6 0-1.4-1-2.4-2.4-2.4M19 7.4c-2.7 1.1-4.4 3.4-4.4 6.1 0 1.9 1.2 3.2 2.9 3.2 1.5 0 2.6-1.1 2.6-2.6 0-1.4-1-2.4-2.4-2.4"/></symbol>
+  <symbol id="i-swap" viewBox="0 0 24 24"><path d="M4 8.4h13.4M14.4 5.4l3 3-3 3M20 15.6H6.6M9.6 12.6l-3 3 3 3"/></symbol>
+</defs></svg>
+
+<div class="progress" aria-hidden="true"></div>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav nav--static">
+  <div class="wrap nav-in">
+    <a class="nav-name" href="index.html">Ahmad Al Jabri</a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="index.html#work">Track record</a>
+      <a href="index.html#practice">Practice</a>
+      <a href="index.html#method">Method</a>
+      <a href="index.html#about">About</a>
+    </nav>
+    <a class="btn btn--sm" href="index.html#contact">Send a message<svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-sm"/></svg></a>
+  </div>
+</header>
+
+<main id="main">
+
+  <section class="case-hero wrap">
+    <p class="eyebrow">Design system · v1.0</p>
+    <h1>AAJ Design System</h1>
+    <p class="one-line">The tokens, components and rules this site is built from. <b>Three layers: primitives, semantic tokens, components.</b> Nothing in a component references a raw value.</p>
+  </section>
+
+  <section class="wrap">
+    <div class="glance">
+      <div><p class="k"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-grid"/></svg>Foundation</p><p class="v">8-point spacing grid, modular 1.25 type scale</p></div>
+      <div><p class="k"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-target"/></svg>Colour</p><p class="v">One accent, one neutral ramp, measured contrast</p></div>
+      <div><p class="k"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-check"/></svg>Standard</p><p class="v">WCAG 2.1 AA for text and interactive targets</p></div>
+      <div><p class="k"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-doc"/></svg>Lineage</p><p class="v">Material Design states, Gestalt grouping, Nielsen heuristics</p></div>
+    </div>
+  </section>
+
+  <section class="beat wrap" style="border-top:0">
+    <div class="beat-head">
+      <p class="n"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-sm"/></svg>01 — Principles</p>
+      <h2>Four rules the system holds to</h2>
+    </div>
+    <div class="prose">
+      <ul>
+        <li><b>Hairlines, not boxes.</b> Structure comes from rules and whitespace. A card is reserved for the one element that genuinely sits apart, so that card still means something.</li>
+        <li><b>One accent, used only for meaning.</b> Ink blue marks actions, links, data and active state. It is never decorative, so its presence always carries information.</li>
+        <li><b>Grouping before decoration.</b> Proximity and similarity do the work that borders and colour would otherwise be asked to do — the Gestalt principles applied as layout, not as styling.</li>
+        <li><b>The page is complete before the first animation.</b> Motion is layered onto a document that already reads correctly with scripts disabled.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="beat wrap">
+    <div class="beat-head">
+      <p class="n"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-sm"/></svg>02 — Colour</p>
+      <h2>Neutrals with a blue bias, one accent</h2>
+    </div>
+    <div class="prose">
+      <p>The neutral ramp carries a slight bias toward the accent hue, so the page reads as one system rather than as grey plus a colour. Contrast ratios are measured against white; the AA threshold is 4.5:1 for body text and 3:1 for large text and interface elements.</p>
+    </div>
+
+    <div class="sg-grid">
+      <div class="sg-swatch">
+        <div class="chip" style="background:#111216"></div>
+        <div class="meta"><span class="name">--c-ink-900</span><span class="hex">#111216</span><span class="ratio">18.9:1 · body and headings</span></div>
+      </div>
+      <div class="sg-swatch">
+        <div class="chip" style="background:#3C434F"></div>
+        <div class="meta"><span class="name">--c-ink-700</span><span class="hex">#3C434F</span><span class="ratio">10.1:1 · secondary text</span></div>
+      </div>
+      <div class="sg-swatch">
+        <div class="chip" style="background:#5F6775"></div>
+        <div class="meta"><span class="name">--c-ink-500</span><span class="hex">#5F6775</span><span class="ratio">5.7:1 · small labels (AA)</span></div>
+      </div>
+      <div class="sg-swatch">
+        <div class="chip" style="background:#9AA2B1"></div>
+        <div class="meta"><span class="name">--c-ink-300</span><span class="hex">#9AA2B1</span><span class="ratio">2.9:1 · decorative only</span></div>
+      </div>
+      <div class="sg-swatch">
+        <div class="chip" style="background:#D5D9E0"></div>
+        <div class="meta"><span class="name">--c-ink-200</span><span class="hex">#D5D9E0</span><span class="ratio">borders</span></div>
+      </div>
+      <div class="sg-swatch">
+        <div class="chip" style="background:#E9ECF1"></div>
+        <div class="meta"><span class="name">--c-ink-100</span><span class="hex">#E9ECF1</span><span class="ratio">rules, inactive tracks</span></div>
+      </div>
+      <div class="sg-swatch">
+        <div class="chip" style="background:#13399E"></div>
+        <div class="meta"><span class="name">--c-accent-500</span><span class="hex">#13399E</span><span class="ratio">10.0:1 · actions, data</span></div>
+      </div>
+      <div class="sg-swatch">
+        <div class="chip" style="background:#E8ECF9"></div>
+        <div class="meta"><span class="name">--c-accent-100</span><span class="hex">#E8ECF9</span><span class="ratio">tint surface</span></div>
+      </div>
+    </div>
+    <p class="sg-note"><b>Rule:</b> #9AA2B1 fails AA for body text at 2.9:1 and is therefore never used for text — only for muted chart fills and non-essential marks. Every text token clears 4.5:1.</p>
+  </section>
+
+  <section class="beat wrap">
+    <div class="beat-head">
+      <p class="n"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-sm"/></svg>03 — Type</p>
+      <h2>One grotesque, one monospace, a 1.25 scale</h2>
+    </div>
+    <div class="prose">
+      <p>Archivo carries both display and body, which is the Swiss convention and keeps the page coherent at every size. IBM Plex Mono is reserved for labels, data values and eyebrows — the register that signals precision. Reading measure is capped at 66 characters.</p>
+    </div>
+
+    <div style="margin-top:var(--space-5)">
+      <div class="sg-row"><span class="k">--text-4xl / h1</span><span style="font-family:var(--font-display);font-weight:800;font-size:clamp(2.2rem,5vw,3.4rem);line-height:1.02;letter-spacing:-.03em">Products people adopt</span></div>
+      <div class="sg-row"><span class="k">--text-3xl / h2</span><span style="font-family:var(--font-display);font-weight:700;font-size:clamp(1.6rem,3vw,2.2rem);letter-spacing:-.02em">Section heading</span></div>
+      <div class="sg-row"><span class="k">--text-xl / h3</span><span style="font-family:var(--font-display);font-weight:700;font-size:1.45rem;letter-spacing:-.01em">Subsection heading</span></div>
+      <div class="sg-row"><span class="k">--text-lg / lede</span><span style="font-size:1.18rem;color:var(--text-secondary)">Introductory line, set wider and lighter than body.</span></div>
+      <div class="sg-row"><span class="k">--text-base / body</span><span>Body copy at 17px with a 1.6 line height, measured to 66 characters.</span></div>
+      <div class="sg-row"><span class="k">--text-sm</span><span style="font-size:.9rem;color:var(--text-secondary)">Secondary body, captions under data.</span></div>
+      <div class="sg-row"><span class="k">--text-2xs / mono</span><span class="eyebrow">Eyebrow label · uppercase · .14em tracking</span></div>
+      <div class="sg-row"><span class="k">Numerals</span><span class="num" style="font-family:var(--font-display);font-weight:800;font-size:2rem;letter-spacing:-.03em">45.45% · 5% → 70% · −15% → −3%</span></div>
+    </div>
+    <p class="sg-note"><b>Rule:</b> every figure uses tabular numerals, so digits align in columns and a number never shifts when it animates.</p>
+  </section>
+
+  <section class="beat wrap">
+    <div class="beat-head">
+      <p class="n"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-sm"/></svg>04 — Space</p>
+      <h2>An 8-point grid with half steps</h2>
+    </div>
+    <div class="prose">
+      <p>Ten steps, from 4px to 128px. Section rhythm, component padding and gaps all draw from the same scale, which is what makes spacing look decided rather than improvised.</p>
+    </div>
+    <div class="sg-space">
+      <span style="width:4px;height:4px"></span>
+      <span style="width:8px;height:8px"></span>
+      <span style="width:12px;height:12px"></span>
+      <span style="width:16px;height:16px"></span>
+      <span style="width:24px;height:24px"></span>
+      <span style="width:32px;height:32px"></span>
+      <span style="width:48px;height:48px"></span>
+      <span style="width:64px;height:64px"></span>
+      <span style="width:96px;height:96px"></span>
+      <span style="width:128px;height:128px"></span>
+    </div>
+    <p class="sg-note">4 · 8 · 12 · 16 · 24 · 32 · 48 · 64 · 96 · 128</p>
+  </section>
+
+  <section class="beat wrap">
+    <div class="beat-head">
+      <p class="n"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-sm"/></svg>05 — Iconography</p>
+      <h2>One stroke weight, one grid, no colour of its own</h2>
+    </div>
+    <div class="prose">
+      <p>Twenty-nine glyphs drawn on the same 24&times;24 grid as the type, stroke only at <span style="font-family:var(--font-mono);font-size:.86rem">1.6</span> with round caps and joins. Nothing is filled, so no icon can out-weigh a heading, and colour is inherited from <span style="font-family:var(--font-mono);font-size:.86rem">currentColor</span> — an icon never carries a hue the surrounding text does not.</p>
+      <p>Three sizes only: <b>14px</b> inside a label or a tag, <b>18px</b> as the default beside text, <b>26px</b> as a standalone marker in a card or callout. Any other size would break the alignment with the type scale.</p>
+      <p>Every icon is <span style="font-family:var(--font-mono);font-size:.86rem">aria-hidden</span>, because in this system the icon never carries the meaning on its own — the label next to it does. That is a deliberate constraint: it keeps the set decorative, so a screen reader hears the same page a sighted reader sees, and it removes the temptation to let a glyph stand in for a word [WCAG 1.1.1].</p>
+      <p>The set ships as one inline <span style="font-family:var(--font-mono);font-size:.86rem">&lt;symbol&gt;</span> sprite per page, referenced with <span style="font-family:var(--font-mono);font-size:.86rem">&lt;use&gt;</span>. Inline rather than an external file so the icons survive being opened from the file system, with no request and no flash of missing glyphs. The master copy is <span style="font-family:var(--font-mono);font-size:.86rem">assets/sprite.html</span>.</p>
+    </div>
+
+    <div class="sg-icons">
+      <div><svg class="icon icon--lg" aria-hidden="true"><use href="#i-arrow"/></svg><code>arrow</code></div>
+      <div><svg class="icon icon--lg" aria-hidden="true"><use href="#i-arrow-sm"/></svg><code>arrow-sm</code></div>
+      <div><svg class="icon icon--lg" aria-hidden="true"><use href="#i-rise"/></svg><code>rise</code></div>
+      <div><svg class="icon icon--lg" aria-hidden="true"><use href="#i-fall"/></svg><code>fall</code></div>
+      <div><svg class="icon icon--lg" aria-hidden="true"><use href="#i-swap"/></svg><code>swap</code></div>
+      <div><svg class="icon icon--lg" aria-hidden="true"><use href="#i-chart"/></svg><code>chart</code></div>
+      <div><svg class="icon icon--lg" aria-hidden="true"><use href="#i-layers"/></svg><code>layers</code></div>
+      <div><svg class="icon icon--lg" aria-hidden="true"><use href="#i-target"/></svg><code>target</code></div>
+      <div><svg class="icon icon--lg" aria-hidden="true"><use href="#i-shield"/></svg><code>shield</code></div>
+      <div><svg class="icon icon--lg" aria-hidden="true"><use href="#i-zap"/></svg><code>zap</code></div>
+      <div><svg class="icon icon--lg" aria-hidden="true"><use href="#i-users"/></svg><code>users</code></div>
+      <div><svg class="icon icon--lg" aria-hidden="true"><use href="#i-device"/></svg><code>device</code></div>
+      <div><svg class="icon icon--lg" aria-hidden="true"><use href="#i-grid"/></svg><code>grid</code></div>
+      <div><svg class="icon icon--lg" aria-hidden="true"><use href="#i-search"/></svg><code>search</code></div>
+      <div><svg class="icon icon--lg" aria-hidden="true"><use href="#i-compass"/></svg><code>compass</code></div>
+      <div><svg class="icon icon--lg" aria-hidden="true"><use href="#i-globe"/></svg><code>globe</code></div>
+      <div><svg class="icon icon--lg" aria-hidden="true"><use href="#i-bank"/></svg><code>bank</code></div>
+      <div><svg class="icon icon--lg" aria-hidden="true"><use href="#i-briefcase"/></svg><code>briefcase</code></div>
+      <div><svg class="icon icon--lg" aria-hidden="true"><use href="#i-cap"/></svg><code>cap</code></div>
+      <div><svg class="icon icon--lg" aria-hidden="true"><use href="#i-award"/></svg><code>award</code></div>
+      <div><svg class="icon icon--lg" aria-hidden="true"><use href="#i-flask"/></svg><code>flask</code></div>
+      <div><svg class="icon icon--lg" aria-hidden="true"><use href="#i-sliders"/></svg><code>sliders</code></div>
+      <div><svg class="icon icon--lg" aria-hidden="true"><use href="#i-doc"/></svg><code>doc</code></div>
+      <div><svg class="icon icon--lg" aria-hidden="true"><use href="#i-check"/></svg><code>check</code></div>
+      <div><svg class="icon icon--lg" aria-hidden="true"><use href="#i-clock"/></svg><code>clock</code></div>
+      <div><svg class="icon icon--lg" aria-hidden="true"><use href="#i-pin"/></svg><code>pin</code></div>
+      <div><svg class="icon icon--lg" aria-hidden="true"><use href="#i-mail"/></svg><code>mail</code></div>
+      <div><svg class="icon icon--lg" aria-hidden="true"><use href="#i-link"/></svg><code>link</code></div>
+      <div><svg class="icon icon--lg" aria-hidden="true"><use href="#i-quote"/></svg><code>quote</code></div>
+    </div>
+    <p class="sg-note">To add one: draw it on the 24&times;24 grid, keep it stroke-only, add the <span style="font-family:var(--font-mono);font-size:.86rem">&lt;symbol&gt;</span> to <span style="font-family:var(--font-mono);font-size:.86rem">assets/sprite.html</span>, and paste the updated sprite into each page. If a new glyph needs a fill or a second weight to read, it does not belong in this set.</p>
+  </section>
+
+  <section class="beat wrap">
+    <div class="beat-head">
+      <p class="n"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-sm"/></svg>06 — Components and states</p>
+      <h2>Every interactive element has four states</h2>
+    </div>
+    <div class="prose">
+      <p>Default, hover, focus-visible and active — the state model from Material Design, applied with one visual language. Focus is never removed, only restyled, and every target clears 44 pixels.</p>
+    </div>
+
+    <div class="sg-row" style="border-top:var(--rule);margin-top:var(--space-5)">
+      <span class="k">Button · primary</span>
+      <span class="sg-states">
+        <button class="btn" type="button">Default</button>
+        <button class="btn" type="button" style="background:var(--action-hover);border-color:var(--action-hover)">Hover</button>
+        <button class="btn" type="button" style="outline:2px solid var(--focus-ring);outline-offset:3px">Focus</button>
+      </span>
+    </div>
+    <div class="sg-row">
+      <span class="k">Button · ghost</span>
+      <span class="sg-states">
+        <button class="btn btn--ghost" type="button">Default</button>
+        <button class="btn btn--ghost" type="button" style="background:var(--action-tint)">Hover</button>
+      </span>
+    </div>
+    <div class="sg-row">
+      <span class="k">Tag</span>
+      <span class="sg-states"><span class="tag">7 user interviews</span><span class="tag">GA4</span><span class="tag">Webflow</span></span>
+    </div>
+    <div class="sg-row">
+      <span class="k">Field</span>
+      <span style="max-width:360px">
+        <label for="demo">Email</label>
+        <input id="demo" type="email" placeholder="name@company.com">
+      </span>
+    </div>
+    <div class="sg-row">
+      <span class="k">Data · bar</span>
+      <span style="max-width:420px">
+        <div class="bars">
+          <div class="bar"><span class="k">Primary</span><span class="track"><span class="fill" data-w="100%"></span></span><span class="v num">45.45%</span></div>
+          <div class="bar"><span class="k">Muted</span><span class="track"><span class="fill fill--muted" data-w="7.7%" data-delay="120"></span></span><span class="v num">~3.5%</span></div>
+        </div>
+      </span>
+    </div>
+    <div class="sg-row">
+      <span class="k">Callout</span>
+      <span class="pull" style="margin:0">
+        <p class="k"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-zap"/></svg>The learning</p>
+        <p>Reserved for a single idea per case: what went wrong and what changed because of it.</p>
+      </span>
+    </div>
+  
+    <div class="sg-row" style="border-top:var(--rule)">
+      <span class="k">Achievement rail</span>
+      <div>
+        <div class="rail-wrap is-scrollable" style="margin-top:0">
+          <div class="rail-scroll">
+            <div class="rail is-in">
+              <div class="node is-in">
+                <p class="n-top"><svg class="icon" aria-hidden="true"><use href="#i-rise"/></svg><span class="n-kind">Kind</span></p>
+                <p class="n-fig num">+30%</p>
+                <p class="n-txt">The figure leads, the sentence explains it, the icon classifies it.</p>
+              </div>
+              <div class="node is-in">
+                <p class="n-top"><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg><span class="n-kind">Kind</span></p>
+                <p class="n-fig num">Zero NPL</p>
+                <p class="n-txt">A node without a number still earns its place when the outcome is categorical.</p>
+              </div>
+            </div>
+          </div>
+          <p class="rail-hint"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-sm"/></svg>Scroll for more</p>
+        </div>
+        <p class="sg-note">One rail per employed role. Horizontal because the nodes are a set within one tenure, not a ranking across roles &mdash; reading them across keeps each role&rsquo;s results visually bound to that role. The rail draws left to right on entry, then the nodes arrive staggered. When the nodes overflow, and only then, script marks the region scrollable, gives it a tab stop and shows the hint: a scroll affordance that cannot scroll is a lie about the interface&rsquo;s own state.</p>
+      </div>
+    </div>
+</section>
+
+  <section class="beat wrap">
+    <div class="beat-head">
+      <p class="n"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-sm"/></svg>07 — Motion</p>
+      <h2>Three durations, one easing curve</h2>
+    </div>
+    <div class="prose">
+      <ul>
+        <li><b>160ms</b> — state changes on controls: hover, focus, border.</li>
+        <li><b>240ms</b> — navigation reveal and small positional shifts.</li>
+        <li><b>450ms</b> — section entry, a 12px rise with a fade.</li>
+        <li><b>1100ms</b> &mdash; a rail or rule drawing across, once, as a section is entered.</li>
+        <li><b>80ms</b> &mdash; the stagger between siblings in a group, so a grid arrives as a sequence.</li>
+        <li><b>800ms</b> — chart bars growing from zero, once, when they enter view.</li>
+      </ul>
+      <p>Easing is a single curve, <span style="font-family:var(--font-mono);font-size:.86rem">cubic-bezier(.2,.7,.3,1)</span>, so everything decelerates the same way. Nothing animates twice, nothing loops, and <span style="font-family:var(--font-mono);font-size:.86rem">prefers-reduced-motion</span> disables all of it while leaving the page fully legible.</p>
+    </div>
+  </section>
+
+  <section class="beat wrap">
+    <div class="beat-head">
+      <p class="n"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-sm"/></svg>08 — Accessibility</p>
+      <h2>The checks this system is held to</h2>
+    </div>
+    <div class="prose">
+      <ul>
+        <li>Every text colour clears <b>4.5:1</b> against its surface; large display text clears 3:1 with room to spare.</li>
+        <li>Form controls and buttons are at least <b>44px</b> tall; every other target, down to a copy button or a “read the case” link, clears the <b>24px</b> floor [WCAG 2.5.8]. Only links set inside a sentence are exempt, and they are the only ones that fall below it.</li>
+        <li>Focus is always visible, with a 2px accent ring and 3px offset.</li>
+        <li>Semantic landmarks and one <b>h1</b> per page, with headings in order.</li>
+        <li>A skip link precedes the navigation.</li>
+        <li>Icons are decorative and hidden from assistive technology; the meaning is always in the adjacent label [WCAG 1.1.1].</li>
+        <li>Horizontally scrolling regions are focusable and labelled, so they can be reached and scrolled from the keyboard — and only when they actually scroll.</li>
+        <li>No page scrolls sideways at any width; a region that overflows handles it inside its own container.</li>
+        <li>Reduced motion is honoured as a preference, not an afterthought.</li>
+        <li>Content is never dependent on an animation to become visible.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="beat wrap">
+    <div class="beat-head">
+      <p class="n"><svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-sm"/></svg>09 — Why this exists</p>
+      <h2>A system, not a stylesheet</h2>
+    </div>
+    <div class="prose">
+      <p>A portfolio could be styled page by page. Documenting it as a system instead makes three things true: a new page can be built without inventing anything, a change to a token propagates everywhere at once, and the decisions can be reviewed by someone who did not make them.</p>
+      <p>That last point is the reason this page is public. In product work, the artefact that lets other people check your reasoning is usually worth more than the artefact that shows your taste.</p>
+    </div>
+  </section>
+
+  <section class="next">
+    <div class="wrap">
+      <a href="index.html">
+        <span class="label">Back</span>
+        <span class="title">Home  <svg class="icon icon--lg" aria-hidden="true"><use href="#i-arrow"/></svg></span>
+      </a>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-in">
+    <span><a href="index.html">Ahmad Al Jabri</a> · Senior Product Manager · Berlin</span>
+    <span>AAJ Design System v1.0</span>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>
